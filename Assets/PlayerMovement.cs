@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
 
 	[Header("Crouching")]
 	public float crouchScale;
-	private bool isCrouching;
+	public bool isCrouching;
 	public float crouchDeltaDown;
 	public float crouchDeltaUp;
 

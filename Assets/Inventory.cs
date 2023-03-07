@@ -111,7 +111,7 @@ public class Inventory : MonoBehaviour
 				Transform t = smallPanels[i].transform;
 				var obj = Instantiate(numberLabelExample);
 				obj.transform.parent = t;
-				obj.transform.position = t.position + new Vector3(13 * canvasScale.x, 125 * canvasScale.y, 0);
+				obj.transform.position = t.position + new Vector3(11 * canvasScale.x, 104 * canvasScale.y, 0);
 				obj.transform.localScale = new Vector3(0.22f, 0.65f);
 
 				smallNumberLabels[i] = obj.GetComponent<TextMeshProUGUI>();
@@ -492,6 +492,8 @@ public class Inventory : MonoBehaviour
 		{
 			Cursor.lockState = CursorLockMode.Locked;
 			SelectItem(smallSelectedId, false);
+			ultraSelectedId = -1;
+			selectorPanelPlus.SetActive(false); //
 		}
 
 		Cursor.visible = opened;
@@ -533,7 +535,7 @@ public class Inventory : MonoBehaviour
 			selectorPanel.transform.SetParent(inventoryPanelParentSmall.transform);
 			selectorPanel.transform.SetSiblingIndex(0);
 
-			selectorPanel.transform.position = smallPanels[id].transform.position;
+			selectorPanel.transform.position = smallPanels[id].transform.position;// + new Vector3(0, 1, 0);
 			selectorPanel.transform.localScale = new Vector3(s, s, 0);
 
 			smallSelectedId = id;

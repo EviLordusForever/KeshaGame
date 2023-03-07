@@ -160,7 +160,7 @@ MonoBehaviour:
   unloadScenesNames:
   - Test1
   nextSceneName: Hall
-  position: {x: -18, y: -2, z: 39}
+  position: {x: -17, y: -3, z: 39}
   everything: {fileID: 144014575}
 --- !u!64 &108811223
 MeshCollider:
