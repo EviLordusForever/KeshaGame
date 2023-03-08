@@ -35,12 +35,12 @@ public class AudioManager : MonoBehaviour
 				door.Play();
 				break;
 			case "pickUp":
-				pitch = 0.9f + (float)rnd.NextDouble() * 0.2f;
+				pitch += -0.1f + (float)rnd.NextDouble() * 0.2f;
 				pickUp.pitch = pitch;
 				pickUp.Play();
 				break;
 			case "throw":
-				pitch = 1.2f + (float)rnd.NextDouble() * 0.2f;
+				pitch += 0.2f + (float)rnd.NextDouble() * 0.2f;
 				_throw.pitch = pitch;
 				_throw.Play();
 				break;

@@ -18,23 +18,34 @@ public class OnStartPanel : MonoBehaviour
 
 		IEnumerator WaitLoad()
 		{
-			gameObject.SetActive(true);
-
-			while (!SceneCurrentlyLoaded("Hall"))
-				yield return new WaitForSeconds(0.2f);
-
 			Color clr = img.color;
 			Color tclr = text.color;
-			float alfa = 1;
 
-			while (alfa > 0)
+			gameObject.SetActive(true);
+			text.color = new Color(tclr.r, tclr.g, tclr.b, 0);
+
+			float alfa = 0;
+
+			while (alfa < 1)
 			{
-				alfa -= 0.02f;
+				alfa += 0.03f;
 
 				text.color = new Color(tclr.r, tclr.g, tclr.b, alfa);
 
 				yield return new WaitForSeconds(0.02f);
 			}
+
+			while (alfa > 0)
+			{
+				alfa -= 0.015f;
+
+				text.color = new Color(tclr.r, tclr.g, tclr.b, alfa);
+
+				yield return new WaitForSeconds(0.02f);
+			}
+
+			while (!SceneCurrentlyLoaded("Hall"))
+				yield return new WaitForSeconds(0.2f);
 
 			alfa = 1;
 

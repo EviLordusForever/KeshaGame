@@ -502,6 +502,7 @@ public class Inventory : MonoBehaviour
 			showingPanel.gameObject.SetActive(false);
 			showingOverlay.SetActive(false);
 			smallInventoryPanel.SetActive(true);
+			audioManager.Play("pickUp", 1.3f);
 		}
 	}
 
@@ -532,7 +533,7 @@ public class Inventory : MonoBehaviour
 			}
 
 			Visualise(id);
-			audioManager.Play("throw", 1);
+			audioManager.Play("throw", MathF.Min(MathF.Max(MathF.Pow(throwCombo, 0.1f), 1), 5));
 		}
 	}
 
