@@ -161,7 +161,7 @@ MonoBehaviour:
   - Test1
   nextSceneName: Hall
   position: {x: -17, y: -3, z: 39}
-  everything: {fileID: 144014575}
+  audioName: Door
 --- !u!64 &108811223
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -438,12 +438,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   col: {fileID: 2044438393}
   loadScenesNames:
-  - Test2
+  - Library
   unloadScenesNames:
   - Hall
   nextSceneName: Test1
   position: {x: -91, y: 2, z: -43}
-  everything: {fileID: 144014575}
+  audioName: Door
 --- !u!64 &2044438392
 MeshCollider:
   m_ObjectHideFlags: 0

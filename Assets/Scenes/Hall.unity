@@ -281,7 +281,9 @@ MonoBehaviour:
   startShowingRotation: {x: 0, y: 0, z: 15}
   showingRotation: {x: 0, y: 0, z: 3}
   showingText: You got wooden box
-  showingAudioName: arfa
+  showingAudioName: 
+  showingDelay: 0
+  pickUpAudioName: pickUp
   rb: {fileID: 0}
   collider: {fileID: 0}
   renderer: {fileID: 0}
@@ -474,9 +476,11 @@ MonoBehaviour:
   rotationZ: 0
   showingOffset: 0.5
   startShowingRotation: {x: 0, y: 36, z: 0}
-  showingRotation: {x: 0, y: 0, z: 6}
-  showingText: ' You got a cucumber!'
+  showingRotation: {x: 0, y: 0, z: 7}
+  showingText: You got a cucumber!!!
   showingAudioName: gong
+  showingDelay: 0.35
+  pickUpAudioName: pickUp
   rb: {fileID: 0}
   collider: {fileID: 0}
   renderer: {fileID: 0}
@@ -702,9 +706,11 @@ MonoBehaviour:
   rotationZ: 0
   showingOffset: 0.5
   startShowingRotation: {x: 0, y: 36, z: 0}
-  showingRotation: {x: 0, y: 0, z: 6}
-  showingText: ' You got a cucumber!'
+  showingRotation: {x: 0, y: 0, z: 7}
+  showingText: You got a cucumber!!!
   showingAudioName: gong
+  showingDelay: 0.35
+  pickUpAudioName: pickUp
   rb: {fileID: 0}
   collider: {fileID: 0}
   renderer: {fileID: 0}
@@ -832,9 +838,11 @@ MonoBehaviour:
   rotationZ: 0
   showingOffset: 0.5
   startShowingRotation: {x: 0, y: 36, z: 0}
-  showingRotation: {x: 0, y: 0, z: 6}
-  showingText: ' You got a cucumber!'
+  showingRotation: {x: 0, y: 0, z: 7}
+  showingText: You got a cucumber!!!
   showingAudioName: gong
+  showingDelay: 0.35
+  pickUpAudioName: pickUp
   rb: {fileID: 0}
   collider: {fileID: 0}
   renderer: {fileID: 0}
@@ -907,7 +915,7 @@ MonoBehaviour:
   unloadScenesNames: []
   nextSceneName: Room1
   position: {x: -72, y: -0.5, z: 0}
-  everything: {fileID: 2088412106}
+  audioName: Door
 --- !u!64 &1300323891
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1051,9 +1059,11 @@ MonoBehaviour:
   rotationZ: 0
   showingOffset: 0.5
   startShowingRotation: {x: 0, y: 36, z: 0}
-  showingRotation: {x: 0, y: 0, z: 6}
-  showingText: ' You got a cucumber!'
+  showingRotation: {x: 0, y: 0, z: 7}
+  showingText: You got a cucumber!!!
   showingAudioName: gong
+  showingDelay: 0.35
+  pickUpAudioName: pickUp
   rb: {fileID: 0}
   collider: {fileID: 0}
   renderer: {fileID: 0}
@@ -1279,9 +1289,11 @@ MonoBehaviour:
   rotationZ: 0
   showingOffset: 0.5
   startShowingRotation: {x: 0, y: 36, z: 0}
-  showingRotation: {x: 0, y: 0, z: 6}
-  showingText: ' You got a cucumber!'
+  showingRotation: {x: 0, y: 0, z: 7}
+  showingText: You got a cucumber!!!
   showingAudioName: gong
+  showingDelay: 0.35
+  pickUpAudioName: pickUp
   rb: {fileID: 0}
   collider: {fileID: 0}
   renderer: {fileID: 0}
@@ -1346,6 +1358,8 @@ MonoBehaviour:
   showingRotation: {x: 0, y: 0, z: 3}
   showingText: 
   showingAudioName: 
+  showingDelay: 0
+  pickUpAudioName: arfa
   rb: {fileID: 0}
   collider: {fileID: 0}
   renderer: {fileID: 0}
@@ -1567,9 +1581,11 @@ MonoBehaviour:
   rotationZ: 0
   showingOffset: 0.5
   startShowingRotation: {x: 0, y: 36, z: 0}
-  showingRotation: {x: 0, y: 0, z: 6}
-  showingText: ' You got a cucumber!'
+  showingRotation: {x: 0, y: 0, z: 7}
+  showingText: You got a cucumber!!!
   showingAudioName: gong
+  showingDelay: 0.35
+  pickUpAudioName: pickUp
   rb: {fileID: 0}
   collider: {fileID: 0}
   renderer: {fileID: 0}
@@ -1697,9 +1713,11 @@ MonoBehaviour:
   rotationZ: 0
   showingOffset: 0.5
   startShowingRotation: {x: 0, y: 36, z: 0}
-  showingRotation: {x: 0, y: 0, z: 6}
-  showingText: ' You got a cucumber!'
+  showingRotation: {x: 0, y: 0, z: 7}
+  showingText: You got a cucumber!!!
   showingAudioName: gong
+  showingDelay: 0.35
+  pickUpAudioName: pickUp
   rb: {fileID: 0}
   collider: {fileID: 0}
   renderer: {fileID: 0}
@@ -2126,9 +2144,11 @@ MonoBehaviour:
   rotationZ: 0
   showingOffset: 0.5
   startShowingRotation: {x: 0, y: 36, z: 0}
-  showingRotation: {x: 0, y: 0, z: 6}
-  showingText: ' You got a cucumber!'
+  showingRotation: {x: 0, y: 0, z: 7}
+  showingText: You got a cucumber!!!
   showingAudioName: gong
+  showingDelay: 0.35
+  pickUpAudioName: pickUp
   rb: {fileID: 0}
   collider: {fileID: 0}
   renderer: {fileID: 0}

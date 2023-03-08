@@ -23,6 +23,8 @@ public class IsItem : MonoBehaviour
     public Vector3 showingRotation;
     public string showingText;
     public string showingAudioName;
+    public float showingDelay;
+    public string pickUpAudioName;
 
     [Header("Do not set:")]
 

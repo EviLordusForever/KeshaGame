@@ -11,12 +11,21 @@ public class Door : MonoBehaviour
 	public string[] unloadScenesNames;
 	public string nextSceneName;
 	public Vector3 position;
-	public GameObject everything;
+	private AudioManager audioManager;
+	public string audioName;
 
 	private void OnTriggerEnter(Collider col2)
 	{
 		if (col2.gameObject.tag == "Player")
 		{
+			if (audioManager == null)
+			{
+				GameObject go = GameObject.FindGameObjectWithTag("AudioManager");
+				audioManager = go.GetComponent<AudioManager>();
+			}
+
+			audioManager.Play(audioName, 1);
+
 			foreach (string name in loadScenesNames)
 				SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
 

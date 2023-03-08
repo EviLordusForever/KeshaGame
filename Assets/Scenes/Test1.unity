@@ -159,10 +159,10 @@ MonoBehaviour:
   loadScenesNames:
   - Hall
   unloadScenesNames:
-  - Test2
+  - Library
   nextSceneName: Room1
   position: {x: -164, y: 1, z: 9}
-  everything: {fileID: 144014575}
+  audioName: Door
 --- !u!64 &108811223
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -687,9 +687,9 @@ MonoBehaviour:
   loadScenesNames: []
   unloadScenesNames:
   - Room1
-  nextSceneName: Test2
+  nextSceneName: Library
   position: {x: -199, y: 2, z: -44}
-  everything: {fileID: 144014575}
+  audioName: Door
 --- !u!64 &1731440373
 MeshCollider:
   m_ObjectHideFlags: 0

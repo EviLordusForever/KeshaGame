@@ -44,6 +44,7 @@ public class Inventory : MonoBehaviour
 	public float throwTime;
 	public float throwSize;
 	public bool throwing;
+	public int throwCombo;
 
 	public Canvas canvas;
 
@@ -72,6 +73,8 @@ public class Inventory : MonoBehaviour
 
 	public void Start()
 	{
+		audioManager.muted = true;
+
 		items = new IsItem[36]; //
 		numberLabels = new TextMeshProUGUI[36];
 		smallNumberLabels = new TextMeshProUGUI[9];
@@ -84,6 +87,7 @@ public class Inventory : MonoBehaviour
 		showingCamera.gameObject.SetActive(false);
 		showingPanel.gameObject.SetActive(false);
 		showingOverlay.SetActive(false);
+		
 
 		needShowItem = GetComponent<NeedShowItem>();
 
@@ -120,9 +124,9 @@ public class Inventory : MonoBehaviour
 			ultraSelectedId = -1;
 
 			SwitchInventory();
-			SelectItem(0, true);
+			//SelectItem(0, true);
 			SwitchInventory();
-			SelectItem(0, false);
+			//SelectItem(0, false);
 			SwitchInventory();
 
 			selectorPanelPlus.SetActive(false);
@@ -130,6 +134,8 @@ public class Inventory : MonoBehaviour
 			numberLabelExample.SetActive(false);
 
 			Visualize();
+
+			audioManager.muted = false;
 		}
 	}
 
@@ -284,7 +290,6 @@ public class Inventory : MonoBehaviour
 			}
 
 
-
 			if (Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Q))
 			{
 				if (items[selectedId] != null)
@@ -305,25 +310,63 @@ public class Inventory : MonoBehaviour
 
 			if (throwing)
 			{
-				if (items[selectedId].throwable)
+				if (items[selectedId] != null)
 				{
-					throwTime += Time.deltaTime;
-					throwSize = throwTime * 1.2f;
+					if (items[selectedId].throwable)
+					{
+						throwTime += Time.deltaTime * Math.Max(Math.Min(MathF.Pow(throwCombo, 0.35f), 10), 1);
 
-					throwPanel.transform.localScale = new Vector3(throwSize, 1, 0);
+						throwSize = Math.Max(throwTime * 1.2f, 0);
+
+						throwPanel.transform.localScale = new Vector3(throwSize, 1, 0);
+					}
 				}
+				else
+					StopCombo();
 			}
 
-			if (throwing && (Input.GetKeyUp(KeyCode.R) || Input.GetKeyUp(KeyCode.Q) || throwSize > 1))
+			if (throwing && (Input.GetKeyUp(KeyCode.R) || Input.GetKeyUp(KeyCode.Q)))
 			{
-				throwPanel.transform.localScale = new Vector3(0, 0, 0);
-				throwPanelBlack.transform.localScale = new Vector3(0, 0, 0);
-				throwPanelRed.transform.localScale = new Vector3(0, 0, 0);
-
-				if (items[selectedId].throwable)
+				if (items[selectedId].throwable && (throwCombo == 0 || throwSize > 0.25f))
 					Throw(selectedId, throwSize * 1500);
 
 				throwing = false;
+				throwPanel.transform.localScale = new Vector3(0, 0, 0);
+				throwPanelBlack.transform.localScale = new Vector3(0, 0, 0);
+				throwPanelRed.transform.localScale = new Vector3(0, 0, 0);
+				throwTime = 0;
+				throwCombo = 0;
+
+				throwSize = 0;
+			}
+
+			if (throwing && throwSize > 1)
+			{
+				if (items[selectedId] != null)
+				{
+					if (items[selectedId].throwable)
+					{
+						Throw(selectedId, throwSize * 1500);
+						throwCombo++;
+					}
+					else
+						StopCombo();
+				}
+				else
+					StopCombo();
+
+				throwTime = 0;
+				throwSize = 0;
+			}
+
+			void StopCombo()
+			{
+				throwing = false;
+				throwPanel.transform.localScale = new Vector3(0, 0, 0);
+				throwPanelBlack.transform.localScale = new Vector3(0, 0, 0);
+
+				throwCombo = 0;
+				throwTime = 0;
 				throwSize = 0;
 			}
 
@@ -368,6 +411,7 @@ public class Inventory : MonoBehaviour
 			isItem.Hide();
 			isItem.obj.transform.parent = allFather.transform; ///
 			Visualise(smallSelectedId);
+			audioManager.Play(isItem.pickUpAudioName, 1);
 			return;
 		}
 
@@ -377,6 +421,7 @@ public class Inventory : MonoBehaviour
 			isItem.transform.position += new Vector3(0, 1, 0); //
 			Destroy(isItem.obj);
 			Visualise(smallSelectedId);
+			audioManager.Play(isItem.pickUpAudioName, 1);
 			return;
 		}
 
@@ -389,6 +434,7 @@ public class Inventory : MonoBehaviour
 					isItem.transform.position += new Vector3(0, 1, 0); //
 					Destroy(isItem.obj);
 					Visualise(id);
+					audioManager.Play(isItem.pickUpAudioName, 1);
 					return;
 				}
 
@@ -400,6 +446,7 @@ public class Inventory : MonoBehaviour
 					isItem.Hide();
 					isItem.obj.transform.parent = allFather.transform; ///
 					Visualise(id);
+					audioManager.Play(isItem.pickUpAudioName, 1);
 					return;
 				}
 	}
@@ -411,27 +458,36 @@ public class Inventory : MonoBehaviour
 			if (opened)
 				SwitchInventory();
 
-			showingStartTime = Time.time;
+			StartCoroutine(LateShow(items[id].showingDelay));
 
-			smallInventoryPanel.SetActive(false);
+			IEnumerator LateShow(float delay)
+			{
+				showingCamera.enabled = true;
 
-			audioManager.Play(items[id].showingAudioName);
+				yield return new WaitForSeconds(delay);
 
-			Vector3 position = showingCamera.transform.position;
-			Vector3 direction = showingCamera.transform.forward * 3;
-			Vector3 offset = new Vector3(0, items[id].showingOffset, 0);
+				smallInventoryPanel.SetActive(false);
 
-			showingItem = Instantiate(items[id].obj, position + direction + offset, Quaternion.identity);
-			showingItemIsItem = showingItem.GetComponent<IsItem>();
+				showingStartTime = Time.time;
 
-			showingItem.transform.eulerAngles = items[id].startShowingRotation;
+				Vector3 position = showingCamera.transform.position;
+				Vector3 direction = showingCamera.transform.forward * 3;
+				Vector3 offset = new Vector3(0, items[id].showingOffset, 0);
 
-			showingItem.GetComponent<Renderer>().enabled = true;
-			showingCamera.enabled = true;
-			showingCamera.gameObject.SetActive(true);
-			showingPanel.gameObject.SetActive(true);
-			showingOverlay.SetActive(true);
-			showingText.text = showingItemIsItem.showingText;
+				showingItem = Instantiate(items[id].obj, position + direction + offset, Quaternion.identity);
+				showingItemIsItem = showingItem.GetComponent<IsItem>();
+
+				showingItem.transform.eulerAngles = items[id].startShowingRotation;
+
+				audioManager.Play(items[id].showingAudioName, 1);
+
+				showingItem.GetComponent<Renderer>().enabled = true;
+				showingCamera.enabled = true;
+				showingCamera.gameObject.SetActive(true);
+				showingPanel.gameObject.SetActive(true);
+				showingOverlay.SetActive(true);
+				showingText.text = showingItemIsItem.showingText;
+			}
 		}
 	}
 
@@ -476,6 +532,7 @@ public class Inventory : MonoBehaviour
 			}
 
 			Visualise(id);
+			audioManager.Play("throw", 1);
 		}
 	}
 
@@ -504,13 +561,15 @@ public class Inventory : MonoBehaviour
 	}
 
 	public void SelectItem(int id, bool permanently)
-	{
+	{	
 		throwing = false;
 		throwPanel.transform.localScale = new Vector3(0, 0, 0);
 		throwPanelBlack.transform.localScale = new Vector3(0, 0, 0);
 		throwPanelRed.transform.localScale = new Vector3(0, 0, 0);
 
 		Vector2 canvasScale = new Vector2(canvas.transform.lossyScale.x, canvas.transform.lossyScale.y);
+
+		audioManager.Play("inventory", 1.3f);
 
 		if (opened)
 		{
@@ -589,16 +648,20 @@ public class Inventory : MonoBehaviour
 				}
 				else if (items[id] != null)
 				{
-					float f = 1.8f;
+					
+					//if (id == ultraSelectedId)
+					{
+						float f = 1.8f;
 
-					ultraSelectedId = id;
+						ultraSelectedId = id;
 
-					selectorPanelPlus.SetActive(true);
-					selectorPanelPlus.transform.SetParent(inventoryPanelParentBig.transform);
-					selectorPanel.transform.SetSiblingIndex(0);
-					selectorPanelPlus.transform.SetSiblingIndex(0);///////////////
-					selectorPanelPlus.transform.position = panels[id].transform.position;
-					selectorPanelPlus.transform.localScale = new Vector3(f, f, 0);
+						selectorPanelPlus.SetActive(true);
+						selectorPanelPlus.transform.SetParent(inventoryPanelParentBig.transform);
+						selectorPanel.transform.SetSiblingIndex(0);
+						selectorPanelPlus.transform.SetSiblingIndex(0);///////////////
+						selectorPanelPlus.transform.position = panels[id].transform.position;
+						selectorPanelPlus.transform.localScale = new Vector3(f, f, 0);
+					}
 				}
 			}
 		}

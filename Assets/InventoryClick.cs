@@ -9,6 +9,6 @@ public class InventoryClick : MonoBehaviour
 
 	public void OnClick()
 	{
-		inventory.SelectItem(id, true);
+		inventory.SelectItem(id, inventory.selectedId == id || inventory.ultraSelectedId > -1);
 	}
 }
