@@ -14,9 +14,14 @@ public class Door : MonoBehaviour
 	private AudioManager audioManager;
 	public string audioName;
 
-	private void OnTriggerEnter(Collider col2)
+	private void OnTriggerEnter(Collider collider)
 	{
-		if (col2.gameObject.tag == "Player")
+		Go(collider.gameObject);
+	}
+
+	public void Go(GameObject playerObject)
+	{
+		if (playerObject.tag == "Player")
 		{
 			if (audioManager == null)
 			{
@@ -32,23 +37,23 @@ public class Door : MonoBehaviour
 			foreach (string name in unloadScenesNames)
 				SceneManager.UnloadSceneAsync(name);
 
-			StartCoroutine(WaitLoad(col2));
+			StartCoroutine(WaitLoad(playerObject));
 		}
 	}
 
-	IEnumerator WaitLoad(Collider col2)
+	IEnumerator WaitLoad(GameObject playerObject)
 	{
 		while (!SceneCurrentlyLoaded(nextSceneName))
 			yield return new WaitForSeconds(0.2f);
 
-		GameObject player = col2.gameObject.transform.parent.gameObject;
-		PlayerMovement pm = player.GetComponent<PlayerMovement>();
+		GameObject playerHub = playerObject.transform.parent.gameObject;
+		PlayerMovement pm = playerHub.GetComponent<PlayerMovement>();
 
 		Vector3 v = new Vector3(0, 0, 0);
 		if (pm.isCrouching)
 			v = new Vector3(0, -2.2f, 0);
 
-		player.transform.position = position + v;
+		playerHub.transform.position = position + v;
 
 		yield return null;
 	}

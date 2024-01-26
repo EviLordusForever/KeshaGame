@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 9479311}
   - component: {fileID: 9479310}
   - component: {fileID: 9479309}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Door 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -312,11 +312,11 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 2088412107}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: e1534673f21d3c24389c58fa25c1dfdd, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e1534673f21d3c24389c58fa25c1dfdd, type: 3}
       propertyPath: m_LocalScale.x
@@ -324,7 +324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e1534673f21d3c24389c58fa25c1dfdd, type: 3}
       propertyPath: m_LocalScale.y
-      value: 40.128136
+      value: 40.12813
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e1534673f21d3c24389c58fa25c1dfdd, type: 3}
       propertyPath: m_LocalScale.z
@@ -434,16 +434,21 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -462981019419857548, guid: e1534673f21d3c24389c58fa25c1dfdd, type: 3}
+--- !u!4 &123738421 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e1534673f21d3c24389c58fa25c1dfdd, type: 3}
+  m_PrefabInstance: {fileID: 123738417}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &170762521
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 2088412107}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: e1534673f21d3c24389c58fa25c1dfdd, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e1534673f21d3c24389c58fa25c1dfdd, type: 3}
       propertyPath: m_LocalScale.x
@@ -451,7 +456,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e1534673f21d3c24389c58fa25c1dfdd, type: 3}
       propertyPath: m_LocalScale.y
-      value: 40.128136
+      value: 40.12813
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e1534673f21d3c24389c58fa25c1dfdd, type: 3}
       propertyPath: m_LocalScale.z
@@ -561,6 +566,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -462981019419857548, guid: e1534673f21d3c24389c58fa25c1dfdd, type: 3}
+--- !u!4 &170762525 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e1534673f21d3c24389c58fa25c1dfdd, type: 3}
+  m_PrefabInstance: {fileID: 170762521}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1300323888
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,7 +584,7 @@ GameObject:
   - component: {fileID: 1300323892}
   - component: {fileID: 1300323891}
   - component: {fileID: 1300323890}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Door 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -849,6 +859,8 @@ Transform:
   - {fileID: 9479308}
   - {fileID: 85050638}
   - {fileID: 1656198986}
+  - {fileID: 123738421}
+  - {fileID: 170762525}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

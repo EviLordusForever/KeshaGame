@@ -71,7 +71,7 @@ public class Inventory : MonoBehaviour
 
 	private NeedShowItem needShowItem;
 
-	public GameObject _player;
+	public GameObject _playerObject;
 
 	public void Start()
 	{
@@ -407,9 +407,9 @@ public class Inventory : MonoBehaviour
 			if (isDoor != null)
 				isDoor.Move();
 
-			//Door door = hit.collider.gameObject.GetComponent<Door>();
-			//if (door != null)
-			//	door.Go(_player);
+			Door door = hit.collider.gameObject.GetComponent<Door>();
+			if (door != null)
+				door.Go(_playerObject);
 		}
 	}
 
