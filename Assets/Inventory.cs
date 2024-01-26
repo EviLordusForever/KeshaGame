@@ -71,6 +71,8 @@ public class Inventory : MonoBehaviour
 
 	private NeedShowItem needShowItem;
 
+	public GameObject _player;
+
 	public void Start()
 	{
 		audioManager.muted = true;
@@ -400,6 +402,14 @@ public class Inventory : MonoBehaviour
 			IsItem isItem = hit.collider.gameObject.GetComponent<IsItem>();
 			if (isItem != null)
 				Take(isItem);
+
+			IsDoor isDoor = hit.collider.gameObject.GetComponent<IsDoor>();
+			if (isDoor != null)
+				isDoor.Move();
+
+			//Door door = hit.collider.gameObject.GetComponent<Door>();
+			//if (door != null)
+			//	door.Go(_player);
 		}
 	}
 
