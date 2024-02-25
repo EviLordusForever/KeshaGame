@@ -25,17 +25,26 @@ public class PlayerCamScript : MonoBehaviour
     {
         if (!showingCamera.enabled)
             if (!inventory.opened)
-            {
-                float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensetivityX;
-                float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensetivityY;
+                if (!inventory._marketOpened)
+                {
+                    float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensetivityX;
+                    float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensetivityY;
 
-                xRotation += mouseX;
-                yRotation -= mouseY;
+                    xRotation += mouseX;
+                    yRotation -= mouseY;
 
-                yRotation = Mathf.Clamp(yRotation, -90f, 90f);
+                    yRotation = Mathf.Clamp(yRotation, -90f, 90f);
 
-                transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-                orientation.rotation = Quaternion.Euler(yRotation, xRotation, 0);
-            }
+                    transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+                    orientation.rotation = Quaternion.Euler(yRotation, xRotation, 0);
+                }
+    }
+
+    public void Rotate(float v)
+    {
+        xRotation += v;
+
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        orientation.rotation = Quaternion.Euler(yRotation, xRotation, 0);
     }
 }

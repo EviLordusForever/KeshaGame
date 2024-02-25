@@ -11,6 +11,7 @@ public class Door : MonoBehaviour
 	public string[] unloadScenesNames;
 	public string nextSceneName;
 	public Vector3 position;
+	public float _rotation;
 	private AudioManager audioManager;
 	public string audioName;
 
@@ -32,7 +33,14 @@ public class Door : MonoBehaviour
 			audioManager.Play(audioName, 1);
 
 			foreach (string name in loadScenesNames)
-				SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+			{
+				Scene scene = SceneManager.GetSceneByName(name);
+				if (scene == null)
+					SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+				else
+				if (!scene.isLoaded)
+					SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+			}
 
 			foreach (string name in unloadScenesNames)
 				SceneManager.UnloadSceneAsync(name);
@@ -54,6 +62,12 @@ public class Door : MonoBehaviour
 			v = new Vector3(0, -2.2f, 0);
 
 		playerHub.transform.position = position + v;
+		PlayerCamScript pcs = Camera.main.GetComponent<PlayerCamScript>();
+		pcs.Rotate(_rotation);
+			//transform.Rotate(Vector3.up, _rotation);
+
+		PlayerStorage ps = playerHub.GetComponent<PlayerStorage>();
+		ps._currentSceneName = nextSceneName;
 
 		yield return null;
 	}

@@ -5,34 +5,62 @@ using System;
 
 public class IsDoor : MonoBehaviour
 {
-	//public
-	float direction = 0f;
+	float direction;
+	float zrx;
+	float zry;
+	float zrz;
+	float cr;
+	private AudioManager _audioManager;
+
+	private void Start()
+	{
+		direction = 0f;
+		zrx = transform.rotation.eulerAngles.x;
+		zry = transform.rotation.eulerAngles.y;
+		zrz = transform.rotation.eulerAngles.z;
+	}
 
 	public void Move()
 	{
-		Quaternion rotation = transform.rotation;
-		Debug.Log("Object rotation: " + rotation.eulerAngles.y);
+		if (_audioManager == null)
+		{
+			GameObject go = GameObject.FindGameObjectWithTag("AudioManager");
+			_audioManager = go.GetComponent<AudioManager>();
+		}
+		_audioManager.Play("toiletDoor", 1);
 
-		if (rotation.eulerAngles.y > 45f)
-			direction = -1f;
+		Quaternion rotation = transform.rotation;
+
+		if (cr < -45)
+			direction = 1.5f;
 		else
-			direction = 1f;
+			direction = -1.5f;
+	}
+
+	public void Close()
+	{
+		direction = 1.5f;
+	}
+
+	public bool Closed
+	{
+		get
+		{
+			return cr >= 0;
+		}
 	}
 
 	public void Update()
 	{
 		if (direction != 0)
 		{
-			Quaternion rotation = transform.rotation;
-
-			if (rotation.eulerAngles.y > 90f && direction == 1f)
+			if (direction > 0 && cr >= 0)
 				direction = 0f;
-			if (rotation.eulerAngles.y < 1.5f && direction == -1f)
+			if (direction < 0 && cr <= -90)
 				direction = 0f;
 
-			transform.Rotate(0f, direction, 0f);
-
-			Debug.Log("Object rotation: " + rotation.eulerAngles.y);
+			cr += direction * Time.deltaTime * 60;
+			transform.rotation = Quaternion.Euler(zrx, zry, zrz + cr);
 		}
 	}
 }

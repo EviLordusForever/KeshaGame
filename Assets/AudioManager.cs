@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-	public AudioSource gong;
-	public AudioSource arfa;
-	public AudioSource door;
-	public AudioSource pickUp;
+	public AudioSource _gong;
+	public AudioSource _arfa;
+	public AudioSource _door;
+	public AudioSource _pickUp;
 	public AudioSource _throw;
-	public AudioSource inventory;
+	public AudioSource _inventory;
+	public AudioSource _plasma;
+	public AudioSource _money;
+	public AudioSource _notEnoughCash;
+	public AudioSource _toiletDoor;
+	public AudioSource _noAmmo;
+	public AudioSource _reload;
+	public AudioSource _toilet;
 	public bool muted;
 
 	public void Play(string name, float pitch)
@@ -22,22 +29,22 @@ public class AudioManager : MonoBehaviour
 		switch (name)
 		{		
 			case "gong":
-				gong.pitch = pitch;
-				gong.Play();
+				_gong.pitch = pitch;
+				_gong.Play();
 				break;
 			case "arfa":
-				arfa.pitch = pitch;
-				arfa.Play();
+				_arfa.pitch = pitch;
+				_arfa.Play();
 				break;
 			case "Door":
 				pitch = 0.9f + (float)rnd.NextDouble() * 0.2f;
-				door.pitch = pitch;
-				door.Play();
+				_door.pitch = pitch;
+				_door.Play();
 				break;
 			case "pickUp":
 				pitch += -0.1f + (float)rnd.NextDouble() * 0.2f;
-				pickUp.pitch = pitch;
-				pickUp.Play();
+				_pickUp.pitch = pitch;
+				_pickUp.Play();
 				break;
 			case "throw":
 				pitch += 0.2f + (float)rnd.NextDouble() * 0.2f;
@@ -45,10 +52,46 @@ public class AudioManager : MonoBehaviour
 				_throw.Play();
 				break;
 			case "inventory":
-				inventory.pitch = pitch;
-				inventory.Play();
+				_inventory.pitch = pitch;
+				_inventory.Play();
+				break;
+			case "plasma":
+				pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+				_plasma.pitch = pitch;
+				_plasma.Play();
+				break;
+			case "money":
+				pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+				_money.pitch = pitch;
+				_money.Play();
+				break;
+			case "notEnoughCash":
+				pitch = 0.9f;
+				_notEnoughCash.pitch = pitch;
+				_notEnoughCash.Play();
+				break;
+			case "noAmmo":
+				pitch = 0.9f;
+				_noAmmo.pitch = pitch;
+				_noAmmo.Play();
+				break;
+			case "toiletDoor":
+				pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+				_toiletDoor.pitch = pitch;
+				_toiletDoor.Play();
+				break;
+			case "reload":
+				pitch = 1f;
+				_reload.pitch = pitch;
+				_reload.Play();
+				break;
+			case "toilet":
+				pitch = 1f;
+				_toilet.pitch = pitch;
+				_toilet.Play();
 				break;
 			default:
+				Debug.Log($"No such audioSource {name}!");
 				break;
 		}
 	}

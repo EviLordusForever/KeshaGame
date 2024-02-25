@@ -31,7 +31,7 @@ public class Inventory : MonoBehaviour
 	public GameObject inventoryPanelParentBig;
 	public GameObject inventoryPanelParentSmall;
 
-	public Camera camera;
+	public Camera _camera;
 	public Camera showingCamera;
 	public Rigidbody prb;
 
@@ -61,17 +61,70 @@ public class Inventory : MonoBehaviour
 	public GameObject throwPanelBlack;
 	public GameObject throwPanelRed;
 
-	public GameObject showingItem;
-	public IsItem showingItemIsItem;
+	public GameObject _showingItem;
+	public Vector3 _showingRotation;
 	public RawImage showingPanel;
 	public GameObject showingOverlay;
 	public TextMeshProUGUI showingText;
 	public float showingStartTime;
 	public AudioManager audioManager;
 
-	private NeedShowItem needShowItem;
-
 	public GameObject _playerObject;
+
+	public bool _marketOpened;
+
+	public bool _cucumberShowed;
+	public bool _gunShowed;
+
+	public IsTrader _trader;
+
+	public PlayerStorage _playerStorage;
+
+	public int CountOfItem(string name)
+	{
+		int count = 0;
+
+		for (int i = 0; i < 36; i++)
+			if (items[i] != null)
+				if (items[i].name == name)
+					count += items[i].count;
+
+		return count;
+	}
+
+	public void Remove(string name, int count)
+	{
+		for (int i = 0; i < 36; i++)
+			if (items[i] != null)
+				if (items[i].name == name)
+				{
+					if (items[i].count > count)
+					{
+						items[i].count -= count;
+						Visualise(i);
+						return;
+					}
+					else if (items[i].count == count)
+					{
+						Destroy(items[i].obj);
+						items[i] = null;
+						ultraSelectedId = -1;
+						selectorPanelPlus.SetActive(false);
+						Visualise(i);
+						return;
+					}
+					else if (items[i].count < count)
+					{
+						count -= items[i].count;
+						Destroy(items[i].obj);
+						items[i] = null;
+						ultraSelectedId = -1;
+						selectorPanelPlus.SetActive(false);
+						Visualise(i);
+						continue;
+					}
+				}
+	}
 
 	public void Start()
 	{
@@ -84,14 +137,11 @@ public class Inventory : MonoBehaviour
 		opened = true;
 		state = "not started";
 
-		showingItem = null;
+		_showingItem = null;
 		showingCamera.enabled = false;
 		showingCamera.gameObject.SetActive(false);
 		showingPanel.gameObject.SetActive(false);
 		showingOverlay.SetActive(false);
-		
-
-		needShowItem = GetComponent<NeedShowItem>();
 
 		StartCoroutine(LateStart(0.5f));
 
@@ -126,9 +176,7 @@ public class Inventory : MonoBehaviour
 			ultraSelectedId = -1;
 
 			SwitchInventory();
-			//SelectItem(0, true);
 			SwitchInventory();
-			//SelectItem(0, false);
 			SwitchInventory();
 
 			selectorPanelPlus.SetActive(false);
@@ -147,8 +195,8 @@ public class Inventory : MonoBehaviour
 		fps = MathF.Round(fps * 0.5f + 0.5f / Time.deltaTime);
 		fpsT.text = fps.ToString();
 
-		if (showingItem != null)
-			showingItem.transform.Rotate(showingItemIsItem.showingRotation.x, showingItemIsItem.showingRotation.y, showingItemIsItem.showingRotation.z, Space.World);
+		if (_showingItem != null)
+			_showingItem.transform.Rotate(_showingRotation.x, _showingRotation.y, _showingRotation.z, Space.World);
 	}
 
 	public void Visualize()
@@ -161,9 +209,6 @@ public class Inventory : MonoBehaviour
 	{
 		if (items[id] != null)
 		{
-			if (needShowItem.NeedOnce(items[id].name))
-				ShowItem(id);
-
 			panels[id].GetComponent<Image>().sprite = items[id].image;
 
 			if (items[id].count > 1)
@@ -205,7 +250,7 @@ public class Inventory : MonoBehaviour
 
 	private void MyInput()
 	{
-		if (showingItem != null)
+		if (_showingItem != null)
 		{
 			if (showingStartTime < Time.time - 1)
 				if (Input.anyKey)
@@ -217,7 +262,6 @@ public class Inventory : MonoBehaviour
 				SwitchInventory();
 			if (Input.GetKeyDown(KeyCode.Escape) && opened)
 				SwitchInventory();
-
 
 			if (opened)
 			{
@@ -286,9 +330,9 @@ public class Inventory : MonoBehaviour
 					Click();
 
 				if (Input.GetKeyDown(KeyCode.C) || Input.GetMouseButtonDown(1))
-					camera.fieldOfView = 28;
+					_camera.fieldOfView = 28;
 				if (Input.GetKeyUp(KeyCode.C) || Input.GetMouseButtonUp(1))
-					camera.fieldOfView = 76; ///////////////////////////////////
+					_camera.fieldOfView = 76; ///////////////////////////////////
 			}
 
 
@@ -395,21 +439,74 @@ public class Inventory : MonoBehaviour
 
 	public void Click()
 	{
-		Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, 7f, notTransperent))
+		if (!_marketOpened && !opened)
 		{
-			IsItem isItem = hit.collider.gameObject.GetComponent<IsItem>();
-			if (isItem != null)
-				Take(isItem);
+			Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+			if (Physics.Raycast(ray, out hit, 7f, notTransperent))
+			{
+				IsTrader trader = hit.collider.gameObject.GetComponent<IsTrader>();
+				if (trader != null)
+				{
+					trader.OpenMarket();
+					return;
+				}
 
-			IsDoor isDoor = hit.collider.gameObject.GetComponent<IsDoor>();
-			if (isDoor != null)
-				isDoor.Move();
+				Door door = hit.collider.gameObject.GetComponent<Door>();
+				if (door != null)
+				{
+					door.Go(_playerObject);
+					return;
+				}
 
-			Door door = hit.collider.gameObject.GetComponent<Door>();
-			if (door != null)
-				door.Go(_playerObject);
+				IsItem isItem = hit.collider.gameObject.GetComponent<IsItem>();
+				if (isItem != null)
+				{
+					Take(isItem);
+					return;
+				}
+
+				Button1 button1 = hit.collider.gameObject.GetComponent<Button1>();
+				if (button1 != null)
+				{
+					button1.Go(_camera);
+					return;
+				}
+			}
+
+			IsItem item = items[selectedId];
+			if (item != null)
+			{
+				if (item.name == "FirstAidKit")
+				{
+					if (_playerStorage._health < 100)
+					{
+						_playerStorage.Heal(100);
+						Remove("FirstAidKit", 1);
+						return;
+					}
+				}
+
+				if (item.obj != null)
+				{
+					IsGun isGun = item.obj.GetComponent<IsGun>();
+					if (isGun != null)
+					{
+						isGun.Fire();
+						return;
+					}
+				}
+			}
+
+			if (Physics.Raycast(ray, out hit, 7f, notTransperent))
+			{
+				IsDoor isDoor = hit.collider.gameObject.GetComponent<IsDoor>();
+				if (isDoor != null)
+				{
+					isDoor.Move();
+					return;
+				}
+			}
 		}
 	}
 
@@ -422,6 +519,7 @@ public class Inventory : MonoBehaviour
 			isItem.obj.transform.parent = allFather.transform; ///
 			Visualise(smallSelectedId);
 			audioManager.Play(isItem.pickUpAudioName, 1);
+			CheckShowing(smallSelectedId);
 			return;
 		}
 
@@ -429,9 +527,11 @@ public class Inventory : MonoBehaviour
 		{
 			items[smallSelectedId].count += isItem.count;
 			isItem.transform.position += new Vector3(0, 1, 0); //
-			Destroy(isItem.obj);
+			if (!isItem._protected)
+				isItem.Destroy();
 			Visualise(smallSelectedId);
 			audioManager.Play(isItem.pickUpAudioName, 1);
+			CheckShowing(smallSelectedId);
 			return;
 		}
 
@@ -442,9 +542,10 @@ public class Inventory : MonoBehaviour
 				{
 					items[id].count += isItem.count;
 					isItem.transform.position += new Vector3(0, 1, 0); //
-					Destroy(isItem.obj);
+					isItem.Destroy();
 					Visualise(id);
 					audioManager.Play(isItem.pickUpAudioName, 1);
+					CheckShowing(id);
 					return;
 				}
 
@@ -457,20 +558,40 @@ public class Inventory : MonoBehaviour
 					isItem.obj.transform.parent = allFather.transform; ///
 					Visualise(id);
 					audioManager.Play(isItem.pickUpAudioName, 1);
+					CheckShowing(id);
 					return;
 				}
+
 	}
 
-	public void ShowItem(int id)
+	public void CheckShowing(int id)
+	{
+		if (!_cucumberShowed)
+			if (items[id].name == "Cucumber")
+			{
+				_cucumberShowed = true;
+				ShowItem(id, "You obtain a cucumber!!!", "gong", 0.5f, 0.35f, new Vector3(0, 36, 0), new Vector3(0, 0, 7));
+			}
+		if (!_gunShowed)
+			if (items[id].name == "Gun")
+			{
+				_gunShowed = true;
+				ShowItem(id, "You obtain a gun!!!", "gong", 0.5f, 0.35f, new Vector3(0, 36, 0), new Vector3(0, 0, 7));
+			}
+	}
+
+	public void ShowItem(int id, string text, string audioName, float offset, float delay, Vector3 startRotation, Vector3 rotation)
 	{
 		if (items[id] != null)
 		{
 			if (opened)
 				SwitchInventory();
+			if (_marketOpened)
+				_trader.CloseMarket();
 
-			StartCoroutine(LateShow(items[id].showingDelay));
+			StartCoroutine(LateShow());
 
-			IEnumerator LateShow(float delay)
+			IEnumerator LateShow()
 			{
 				showingCamera.enabled = true;
 
@@ -482,31 +603,31 @@ public class Inventory : MonoBehaviour
 
 				Vector3 position = showingCamera.transform.position;
 				Vector3 direction = showingCamera.transform.forward * 3;
-				Vector3 offset = new Vector3(0, items[id].showingOffset, 0);
+				Vector3 offsetV = new Vector3(0, offset, 0);
 
-				showingItem = Instantiate(items[id].obj, position + direction + offset, Quaternion.identity);
-				showingItemIsItem = showingItem.GetComponent<IsItem>();
+				_showingItem = Instantiate(items[id].obj, position + direction + offsetV, Quaternion.identity);
 
-				showingItem.transform.eulerAngles = items[id].startShowingRotation;
+				_showingItem.transform.eulerAngles = startRotation;
 
-				audioManager.Play(items[id].showingAudioName, 1);
+				audioManager.Play(audioName, 1);
 
-				showingItem.GetComponent<Renderer>().enabled = true;
+				_showingItem.GetComponent<Renderer>().enabled = true;
 				showingCamera.enabled = true;
 				showingCamera.gameObject.SetActive(true);
 				showingPanel.gameObject.SetActive(true);
 				showingOverlay.SetActive(true);
-				showingText.text = showingItemIsItem.showingText;
+				showingText.text = text;
+				_showingRotation = rotation;
 			}
 		}
 	}
 
 	public void HideShowingItem()
 	{
-		if (showingItem != null)
+		if (_showingItem != null)
 		{
-			Destroy(showingItem);
-			showingItem = null;
+			Destroy(_showingItem);
+			_showingItem = null;
 			showingCamera.enabled = false;
 			showingCamera.gameObject.SetActive(false);
 			showingPanel.gameObject.SetActive(false);
@@ -520,15 +641,15 @@ public class Inventory : MonoBehaviour
 	{
 		if (items[id] != null)
 		{
-			Vector3 position = camera.transform.position;
-			Vector3 direction = camera.transform.forward;
+			Vector3 position = _camera.transform.position;
+			Vector3 direction = _camera.transform.forward;
 
 			int buffer = items[id].count;
 			items[id].count = 1;
 
 			GameObject obj = Instantiate(items[id].obj, position + direction, Quaternion.identity);
 			IsItem isItem = obj.GetComponent<IsItem>();
-			isItem.Throw(position, direction, power, prb.velocity, camera.transform.rotation); //
+			isItem.Throw(position, direction, power, prb.velocity, _camera.transform.rotation); //
 			obj.transform.parent = GameObject.Find("Everything").transform;
 
 			items[id].count = buffer - 1;
@@ -549,26 +670,29 @@ public class Inventory : MonoBehaviour
 
 	public void SwitchInventory()
 	{
-		opened = !opened;
-
-		if (opened)
+		if (!_marketOpened)
 		{
-			Cursor.lockState = CursorLockMode.None;
-			SelectItem(selectedId, false);
-		}
-		else
-		{
-			Cursor.lockState = CursorLockMode.Locked;
-			SelectItem(smallSelectedId, false);
-			ultraSelectedId = -1;
-			selectorPanelPlus.SetActive(false); //
-		}
+			opened = !opened;
 
-		Cursor.visible = opened;
+			if (opened)
+			{
+				Cursor.lockState = CursorLockMode.None;
+				SelectItem(selectedId, false);
+			}
+			else
+			{
+				Cursor.lockState = CursorLockMode.Locked;
+				SelectItem(smallSelectedId, false);
+				ultraSelectedId = -1;
+				selectorPanelPlus.SetActive(false); //
+			}
 
-		inventoryPanel.gameObject.SetActive(opened);
-		smallInventoryPanel.gameObject.SetActive(!opened);
-		cursorPanel.gameObject.SetActive(!opened);
+			Cursor.visible = opened;
+
+			inventoryPanel.gameObject.SetActive(opened);
+			smallInventoryPanel.gameObject.SetActive(!opened);
+			cursorPanel.gameObject.SetActive(!opened);
+		}
 	}
 
 	public void SelectItem(int id, bool permanently)

@@ -126,23 +126,24 @@ public class PlayerMovement : MonoBehaviour
 	{
 		if (!showingCamera.enabled)
 			if (!inventory.opened)
-			{
-				horizontalInput = Input.GetAxisRaw("Horizontal");
-				verticalInput = Input.GetAxisRaw("Vertical");
-
-				if (Input.GetKey(jumpKey) && readyToJump && grounded)
+				if (!inventory._marketOpened)
 				{
-					Jump();
+					horizontalInput = Input.GetAxisRaw("Horizontal");
+					verticalInput = Input.GetAxisRaw("Vertical");
 
-					Invoke(nameof(ResetJump), jumpCooldown);
+					if (Input.GetKey(jumpKey) && readyToJump && grounded)
+					{
+						Jump();
+
+						Invoke(nameof(ResetJump), jumpCooldown);
+					}
+
+					if (Input.GetKeyDown(crouchKey))
+						isCrouching = true;
+
+					if (Input.GetKeyUp(crouchKey))
+						isCrouching = false;
 				}
-
-				if (Input.GetKeyDown(crouchKey))
-					isCrouching = true;
-
-				if (Input.GetKeyUp(crouchKey))
-					isCrouching = false;
-			}
 	}
 
 	private void Crouch()
