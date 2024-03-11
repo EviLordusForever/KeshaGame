@@ -23,7 +23,7 @@ public class IsItem : MonoBehaviour
 
     public Rigidbody rb;
     public Collider collider;
-    public Renderer renderer;
+    public Renderer _renderer;
     public Transform _transform;
     public GameObject obj;
 
@@ -39,7 +39,7 @@ public class IsItem : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<Collider>();
-        renderer = GetComponent<Renderer>();
+        _renderer = GetComponent<Renderer>();
         _transform = GetComponent<Transform>();
         obj = gameObject;
 
@@ -61,29 +61,38 @@ public class IsItem : MonoBehaviour
             if (rb != null)
                 rb.isKinematic = true;
 
-            renderer.enabled = false;
+            _renderer.enabled = false;
             collider.enabled = false;
 
             EnemySave es = new EnemySave();
             es._hidden = true;            
             _allFather.Save(_key, es);
+
+            foreach (Transform child in transform)
+                Destroy(child.gameObject);
         }
     }
 
     public void Destroy()
     {
-        EnemySave es = new EnemySave();
-        es._destroyed = true;
-        _allFather.Save(_key, es);
+        if (!_protected)
+        {
+            EnemySave es = new EnemySave();
+            es._destroyed = true;
+            _allFather.Save(_key, es);
 
-        Destroy(gameObject);
+            foreach (Transform child in transform)
+                Destroy(child.gameObject);
+
+            Destroy(gameObject);
+        }
     }
 
     public void Throw(Vector3 position, Vector3 direction, float power, Vector3 playerVelocity, Quaternion rotation)
     {
         transform.position = position + direction;
         transform.rotation = rotation * Quaternion.Euler(rotationX, rotationY, rotationZ);
-        renderer.enabled = true;
+        _renderer.enabled = true;
         collider.enabled = true;
 
         if (rb != null)

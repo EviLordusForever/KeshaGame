@@ -34,7 +34,7 @@ public class Spider : MonoBehaviour
     private bool _run;
     public bool _dead;
 
-    private float _health;
+    public float _health;
 
     public GameObject _ray;
     private GameObject _sparkle;

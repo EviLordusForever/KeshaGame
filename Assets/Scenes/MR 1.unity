@@ -322,7 +322,7 @@ MonoBehaviour:
   rotationZ: 0
   rb: {fileID: 0}
   collider: {fileID: 0}
-  renderer: {fileID: 0}
+  _renderer: {fileID: 0}
   _transform: {fileID: 0}
   obj: {fileID: 569104420}
 --- !u!64 &569104422
@@ -444,7 +444,7 @@ MonoBehaviour:
   rotationZ: 0
   rb: {fileID: 0}
   collider: {fileID: 0}
-  renderer: {fileID: 0}
+  _renderer: {fileID: 0}
   _transform: {fileID: 0}
   obj: {fileID: 934622814}
 --- !u!64 &934622816
@@ -515,6 +515,7 @@ MonoBehaviour:
   - MR 3
   nextSceneName: MR 2
   position: {x: 68.5, y: -3, z: 1.59}
+  _rotation: 0
   audioName: Door
 --- !u!64 &1300323891
 MeshCollider:
@@ -765,11 +766,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   col: {fileID: 1468219462}
-  loadScenesNames: []
+  loadScenesNames:
+  - MR 4
   unloadScenesNames:
   - MR 2
   nextSceneName: MR 3
   position: {x: 177.5, y: -3, z: -0.54}
+  _rotation: 0
   audioName: Door
 --- !u!64 &1468219461
 MeshCollider:
@@ -911,7 +914,7 @@ MonoBehaviour:
   rotationZ: 0
   rb: {fileID: 0}
   collider: {fileID: 0}
-  renderer: {fileID: 0}
+  _renderer: {fileID: 0}
   _transform: {fileID: 0}
   obj: {fileID: 1841816635}
 --- !u!64 &1841816637

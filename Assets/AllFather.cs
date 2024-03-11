@@ -13,6 +13,9 @@ public class AllFather : MonoBehaviour
 	public AudioSource _shot;
 	public Camera _camera;
 	public Canvas _canvas;
+	public Inventory _inventory;
+	public IsItem _redCrystal;
+	public AudioManager _audioManager;
 
 	public int _enemyBulletSparklesCount;
 
@@ -37,5 +40,41 @@ public class AllFather : MonoBehaviour
 	public bool Contains(string key)
 	{
 		return _theSave.ContainsKey(key);
+	}
+
+	public EnemyParams GetEnemyParams(string name)
+	{
+		EnemyParams ep = new EnemyParams();
+
+		if (name == "zombie")
+		{
+			ep._screamerX = 0;
+			ep._screamerY = -3.9f;
+			ep._screamerZ = 0.60f;
+			ep._screamerSounds = new string[] { "screamer1", "screamer2", "screamer3", "screamer4", "screamer5", "screamer6", "screamer7" };
+		}
+		else if (name == "professor")
+		{
+			ep._screamerX = 0;
+			ep._screamerY = -4.2f;
+			ep._screamerZ = 0.65f;
+			ep._screamerSounds = new string[] { "screamer1", "screamer2", "screamer3", "screamer4", "screamer5", "screamer6", "screamer7" };
+		}
+		else if (name == "musculus")
+		{
+			ep._screamerX = 0;
+			ep._screamerY = -4.6f;
+			ep._screamerZ = 2.7f;
+			ep._screamerSounds = new string[] { "screamer1", "screamer2", "screamer3", "screamer4", "screamer5", "screamer6", "screamer7" };
+		}
+		else if (name == "ghost")
+		{
+			ep._screamerX = 0;
+			ep._screamerY = -3;
+			ep._screamerZ = 1.5f;
+			ep._screamerSounds = new string[] { "screamer1", "screamer2", "screamer3", "screamer4", "screamer5", "screamer6", "screamer7" };
+		}
+
+		return ep;
 	}
 }

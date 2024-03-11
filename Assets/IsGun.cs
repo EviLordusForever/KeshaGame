@@ -79,11 +79,19 @@ public class IsGun : MonoBehaviour
 
                 Zombie zombie = hit.collider.gameObject.GetComponent<Zombie>();
                 if (zombie != null)
+                {
+                    if (zombie._health <= 15)
+                        TakeRedCrystal();
                     zombie.Damage(15);
+                }
 
                 Spider spider = hit.collider.gameObject.GetComponent<Spider>();
                 if (spider != null)
+                {
+                    if (spider._health <= 15)
+                        TakeRedCrystal();
                     spider.Damage(15);
+                }
 
                 Vector3 from = _mainCamera.transform.position + _mainCamera.transform.right * _rayRight - _mainCamera.transform.up * _rayDown;
 
@@ -114,6 +122,13 @@ public class IsGun : MonoBehaviour
         }
         else
             _audioManager.Play("noAmmo", 1);
+    }
+
+    public void TakeRedCrystal()
+    {
+        var clone = Instantiate(_allFather._redCrystal);
+        clone.Start(); /////////////////////////////////bug fix
+        _allFather._inventory.Take(clone);
     }
 
     public float Length(Vector3 v)

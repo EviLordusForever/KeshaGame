@@ -49,9 +49,18 @@ public class OnStartPanel : MonoBehaviour
 
 			alfa = 1;
 
-			while (alfa > 0)
+			while (alfa > 0.5f)
 			{
 				alfa -= 0.005f;
+
+				img.color = new Color(clr.r, clr.g, clr.b, alfa);
+
+				yield return new WaitForSeconds(0.02f);
+			}
+
+			while (alfa > 0)
+			{
+				alfa -= 0.025f;
 
 				img.color = new Color(clr.r, clr.g, clr.b, alfa);
 

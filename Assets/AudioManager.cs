@@ -17,6 +17,16 @@ public class AudioManager : MonoBehaviour
 	public AudioSource _noAmmo;
 	public AudioSource _reload;
 	public AudioSource _toilet;
+	public AudioSource _kill;
+	public AudioSource _damage;
+	public AudioSource _heal;
+	public AudioSource _screamer1;
+	public AudioSource _screamer2;
+	public AudioSource _screamer3;
+	public AudioSource _screamer4;
+	public AudioSource _screamer5;
+	public AudioSource _screamer6;
+	public AudioSource _screamer7;
 	public bool muted;
 
 	public void Play(string name, float pitch)
@@ -89,6 +99,54 @@ public class AudioManager : MonoBehaviour
 				pitch = 1f;
 				_toilet.pitch = pitch;
 				_toilet.Play();
+				break;
+			case "kill":
+				pitch = 1f;
+				_kill.pitch = pitch;
+				_kill.Play();
+				break;
+			case "damage":
+				pitch = 1.1f;
+				_damage.pitch = pitch;
+				_damage.Play();
+				break;
+			case "heal":
+				_heal.Play();
+				break;
+			case "screamer1":
+				pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+				_screamer1.pitch = pitch;
+				_screamer1.Play();
+				break;
+			case "screamer2":
+				pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+				_screamer2.pitch = pitch;
+				_screamer2.Play();
+				break;
+			case "screamer3":
+				pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+				_screamer3.pitch = pitch;
+				_screamer3.Play();
+				break;
+			case "screamer4":
+				pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+				_screamer4.pitch = pitch;
+				_screamer4.Play();
+				break;
+			case "screamer5":
+				pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+				_screamer5.pitch = pitch;
+				_screamer5.Play();
+				break;
+			case "screamer6":
+				pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+				_screamer6.pitch = pitch;
+				_screamer6.Play();
+				break;
+			case "screamer7":
+				pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+				_screamer7.pitch = pitch;
+				_screamer7.Play();
 				break;
 			default:
 				Debug.Log($"No such audioSource {name}!");

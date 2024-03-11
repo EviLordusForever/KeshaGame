@@ -97,6 +97,9 @@ public class PlayerMovement : MonoBehaviour
 			pm.dynamicFriction = airWallFrictionRb;
 			rb.velocity = new Vector3(rb.velocity.x * airDrag, rb.velocity.y, rb.velocity.z * airDrag);
 		}
+
+		if (transform.position.y < -500)
+			transform.position = new Vector3(transform.position.x, 500, transform.position.z);
 	}
 
 	private void FixedUpdate()

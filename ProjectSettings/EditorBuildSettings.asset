@@ -77,4 +77,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BR 8.unity
     guid: 645cda746133fa443ba46423f5913ce6
+  - enabled: 1
+    path: Assets/Scenes/MR 4.unity
+    guid: b7aa2ebc43839a44d9d2aee33f773fa7
   m_configObjects: {}

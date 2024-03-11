@@ -67,7 +67,7 @@ public class Inventory : MonoBehaviour
 	public GameObject showingOverlay;
 	public TextMeshProUGUI showingText;
 	public float showingStartTime;
-	public AudioManager audioManager;
+	public AudioManager _audioManager;
 
 	public GameObject _playerObject;
 
@@ -128,7 +128,7 @@ public class Inventory : MonoBehaviour
 
 	public void Start()
 	{
-		audioManager.muted = true;
+		_audioManager.muted = true;
 
 		items = new IsItem[36]; //
 		numberLabels = new TextMeshProUGUI[36];
@@ -185,7 +185,7 @@ public class Inventory : MonoBehaviour
 
 			Visualize();
 
-			audioManager.muted = false;
+			_audioManager.muted = false;
 		}
 	}
 
@@ -445,6 +445,28 @@ public class Inventory : MonoBehaviour
 			RaycastHit hit;
 			if (Physics.Raycast(ray, out hit, 7f, notTransperent))
 			{
+				FrerardHolder fh = hit.collider.gameObject.GetComponent<FrerardHolder>();
+				if (fh != null)
+				{
+					if (items[selectedId] != null)
+					{
+						FrerardObject fo = items[selectedId].obj.GetComponent<FrerardObject>();
+						if (fo != null)
+						{
+							fh.Take(items[selectedId]);
+							items[selectedId] = null;
+							Visualise(selectedId);
+							return;
+						}
+						else
+							fh.Take(null);
+					}
+					else
+					{
+						fh.Take(null);
+					}
+				}
+
 				IsTrader trader = hit.collider.gameObject.GetComponent<IsTrader>();
 				if (trader != null)
 				{
@@ -477,12 +499,14 @@ public class Inventory : MonoBehaviour
 			IsItem item = items[selectedId];
 			if (item != null)
 			{
+				Debug.Log(item.name);
 				if (item.name == "FirstAidKit")
 				{
 					if (_playerStorage._health < 100)
 					{
 						_playerStorage.Heal(100);
 						Remove("FirstAidKit", 1);
+						_audioManager.Play("heal", 1);
 						return;
 					}
 				}
@@ -518,7 +542,7 @@ public class Inventory : MonoBehaviour
 			isItem.Hide();
 			isItem.obj.transform.parent = allFather.transform; ///
 			Visualise(smallSelectedId);
-			audioManager.Play(isItem.pickUpAudioName, 1);
+			_audioManager.Play(isItem.pickUpAudioName, 1);
 			CheckShowing(smallSelectedId);
 			return;
 		}
@@ -527,10 +551,9 @@ public class Inventory : MonoBehaviour
 		{
 			items[smallSelectedId].count += isItem.count;
 			isItem.transform.position += new Vector3(0, 1, 0); //
-			if (!isItem._protected)
-				isItem.Destroy();
+			isItem.Destroy();
 			Visualise(smallSelectedId);
-			audioManager.Play(isItem.pickUpAudioName, 1);
+			_audioManager.Play(isItem.pickUpAudioName, 1);
 			CheckShowing(smallSelectedId);
 			return;
 		}
@@ -544,7 +567,7 @@ public class Inventory : MonoBehaviour
 					isItem.transform.position += new Vector3(0, 1, 0); //
 					isItem.Destroy();
 					Visualise(id);
-					audioManager.Play(isItem.pickUpAudioName, 1);
+					_audioManager.Play(isItem.pickUpAudioName, 1);
 					CheckShowing(id);
 					return;
 				}
@@ -557,7 +580,7 @@ public class Inventory : MonoBehaviour
 					isItem.Hide();
 					isItem.obj.transform.parent = allFather.transform; ///
 					Visualise(id);
-					audioManager.Play(isItem.pickUpAudioName, 1);
+					_audioManager.Play(isItem.pickUpAudioName, 1);
 					CheckShowing(id);
 					return;
 				}
@@ -609,7 +632,7 @@ public class Inventory : MonoBehaviour
 
 				_showingItem.transform.eulerAngles = startRotation;
 
-				audioManager.Play(audioName, 1);
+				_audioManager.Play(audioName, 1);
 
 				_showingItem.GetComponent<Renderer>().enabled = true;
 				showingCamera.enabled = true;
@@ -633,7 +656,7 @@ public class Inventory : MonoBehaviour
 			showingPanel.gameObject.SetActive(false);
 			showingOverlay.SetActive(false);
 			smallInventoryPanel.SetActive(true);
-			audioManager.Play("pickUp", 1.3f);
+			_audioManager.Play("pickUp", 1.3f);
 		}
 	}
 
@@ -664,7 +687,7 @@ public class Inventory : MonoBehaviour
 			}
 
 			Visualise(id);
-			audioManager.Play("throw", MathF.Min(MathF.Max(MathF.Pow(throwCombo, 0.1f), 1), 5));
+			_audioManager.Play("throw", MathF.Min(MathF.Max(MathF.Pow(throwCombo, 0.1f), 1), 5));
 		}
 	}
 
@@ -704,7 +727,7 @@ public class Inventory : MonoBehaviour
 
 		Vector2 canvasScale = new Vector2(canvas.transform.lossyScale.x, canvas.transform.lossyScale.y);
 
-		audioManager.Play("inventory", 1.3f);
+		_audioManager.Play("inventory", 1.3f);
 
 		if (opened)
 		{

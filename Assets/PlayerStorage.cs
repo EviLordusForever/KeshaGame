@@ -10,16 +10,21 @@ public class PlayerStorage : MonoBehaviour
     public float _health;
     public Image _healthImage;
     public GameObject _onDiePanel;
+    AudioManager _audioManager;
 
     void Start()
     {
         _health = 100f;
+
+        GameObject go = GameObject.FindGameObjectWithTag("AudioManager");
+        _audioManager = go.GetComponent<AudioManager>();
     }
 
     public void Damage(float amount)
     {
         _health -= amount;
         _healthImage.fillAmount = _health / 100f;
+        _audioManager.Play("damage", 1);
 
         if (_health <= 0f)
         {

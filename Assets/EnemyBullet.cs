@@ -56,14 +56,14 @@ public class EnemyBullet : MonoBehaviour
                         Destroy(_allFather._spots[0]);
                         _allFather._spots.RemoveAt(0);
                     }
+                }
 
-                    for (int i = 0; i < _allFather._enemyBulletSparklesCount; i++)
-                    {
-                        GameObject sparkle = Instantiate(_allFather._redSparkle);
-                        sparkle.transform.position = hit.point;
-                        sparkle.transform.rotation = Quaternion.LookRotation(hit.normal);
-                        sparkle.GetComponent<IsSparkle>()._active = true;
-                    }                    
+                for (int i = 0; i < _allFather._enemyBulletSparklesCount; i++)
+                {
+                    GameObject sparkle = Instantiate(_allFather._redSparkle);
+                    sparkle.transform.position = hit.point;
+                    sparkle.transform.rotation = Quaternion.LookRotation(hit.normal);
+                    sparkle.GetComponent<IsSparkle>()._active = true;
                 }
 
                 Destroy(gameObject);

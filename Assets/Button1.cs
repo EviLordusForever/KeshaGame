@@ -88,7 +88,7 @@ public class Button1 : MonoBehaviour
 	{
 		if (_pressed && !_finished)
 		{
-			Debug.Log($"{_obj.transform.position.y} > {_startY} + {_finalDeltaY}");
+			//Debug.Log($"{_obj.transform.position.y} > {_startY} + {_finalDeltaY}");
 			if (_obj.transform.position.y > _startY + _finalDeltaY)
 			{
 				if (_isDoor.Closed)
